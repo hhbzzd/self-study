@@ -8,6 +8,10 @@ package com.ehensin.study.dsa.list;
 public interface DsaList<T> {
     void add(T t);
     void add(int index, T t);
+    /**
+     * only remove the first matched element
+     *
+     * */
     void remove(T t);
     void remove(int index);
     T get(int index);

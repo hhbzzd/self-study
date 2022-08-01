@@ -10,6 +10,7 @@ public class DsaArrayList<T> implements DsaList<T>{
     /*internal array to contain elements*/
     private T[] elements;
     /*capacity for current list, default value is 100 */
+    private int initCapacity;
     private int capacity = 100;
     /*size of the list*/
     private int size;
@@ -19,11 +20,13 @@ public class DsaArrayList<T> implements DsaList<T>{
         this.size = elements.length;
     }
     public DsaArrayList() {
+        initCapacity = this.capacity;
         this.elements = (T[]) new Object[this.capacity];
     }
     public DsaArrayList(int capacity) {
         assert capacity > 0;
         this.elements = (T[]) new Object[capacity];
+        this.initCapacity = capacity;
         this.capacity = capacity;
     }
 
@@ -51,7 +54,7 @@ public class DsaArrayList<T> implements DsaList<T>{
 
     @Override
     public void add(int index, T t) {
-        assert index >= 0 && index < size;
+        assert index >= 0 && index <= size;
         if( size >= capacity ){
             /*resize list, increase twice*/
             resize(capacity + capacity);
@@ -63,17 +66,27 @@ public class DsaArrayList<T> implements DsaList<T>{
 
     @Override
     public void clear() {
-
+        size = 0;
+        capacity = this.initCapacity;
+        elements = (T[])new Object[capacity];
     }
 
     @Override
     public void remove(T t) {
-
+        assert t != null;
+        /*locate the index*/
+        int index = indexOf(t);
+        if( index == -1 )
+            return;
+        System.arraycopy(elements, index + 1, elements, index, size - index);
+        size--;
     }
 
     @Override
     public void remove(int index) {
-
+        assert index >= 0 && index < size;
+        System.arraycopy(elements, index + 1, elements, index, size - index);
+        size--;
     }
 
     @Override
@@ -96,16 +109,16 @@ public class DsaArrayList<T> implements DsaList<T>{
 
     @Override
     public boolean contains(T t) {
-        return false;
+        return indexOf(t) != -1;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 }
